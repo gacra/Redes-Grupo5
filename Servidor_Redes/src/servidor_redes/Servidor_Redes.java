@@ -1,21 +1,42 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package servidor_redes;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  *
  * @author Guilherme
  */
 public class Servidor_Redes{
+    int num_urna;
+    
+    public Servidor_Redes(){
+        this.num_urna = 0;
+    }
+    
+    public synchronized int novaUrna(){
+        num_urna++;
+        return num_urna;
+    }
+   
+    public static void main(String[] args) throws IOException{
+        Servidor_Redes servidor = new Servidor_Redes();
+        
+        //Servidor aguardando conecções na porta 1500
+        ServerSocket server = new ServerSocket(40105, 100);
+        
+        //Loop para conectar aos clientes
+        while (true) {
+            System.out.println("Aguardando conexões...");
+            Socket socket = server.accept();
+            System.out.println("Conectado!");
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args){
-        // TODO code application logic here
+            Comunicador urna = new Comunicador(socket, servidor);
+           
+            Thread t = new Thread(urna);
+            t.start();
+        }
     }
     
 }

@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cliente_redes;
 
-/**
- *
- * @author Guilherme
- */
+import java.io.IOException;
+
+
 public class Cliente_Redes{
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args){
-        // TODO code application logic here
+    public static void main(String[] args) throws IOException{
+        int num_urna;
+        
+        System.out.println("Conectando.");
+        Comunicador comunicador = new Comunicador(); 
+        comunicador.conectar();
+        num_urna = comunicador.pConexao();
+        System.out.println("Conectado. Sou a urna: " + num_urna);               
     }
     
 }
