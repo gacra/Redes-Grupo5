@@ -1,18 +1,25 @@
 package cliente_redes;
 
+import Comum.Candidato;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Comunicador{
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
+    Urna urna;
+
+    public Comunicador(Urna urna){
+        this.urna = urna;
+    }
     
     /**
      *Estabelece uma conexão com o servidor.
-     * @param 
+     * 
      * @return Se a conexão foi estabelecida. 
      */
     public boolean conectar(){
@@ -40,13 +47,26 @@ public class Comunicador{
     /**
      *Primeira conexão com o servidor (codOp = 999). 
      * Recebe o número da urna e a lista de candidatos.
-     * @return Número da urna.
+     *
      */
-    public int pConexao() throws IOException, ClassNotFoundException{
-        Integer num_urna;
+    public void pConexao() throws IOException, ClassNotFoundException{
         this.output.writeObject(Integer.valueOf(999));
-        num_urna = (Integer)this.input.readObject();
+        urna.setNum_urna((Integer)this.input.readObject());
+        System.out.println("Conectado. Sou a urna: " + urna.getNum_urna()); 
+        
+        urna.setListaCandidatos((HashMap<Integer, Candidato>) this.input.readObject());
+        
         this.desconectar();
-        return num_urna;
+    }
+    
+    public void sConexao() throws IOException{
+        this.output.writeObject(Integer.valueOf(888));
+        this.output.writeObject(urna.getNum_urna());
+        this.output.writeObject(urna.getListaCandidatos());
+        this.output.writeObject(urna.getBrancos());
+        this.output.writeObject(urna.getNulos());
+        System.out.println("Urna " + urna.getNum_urna() + " encerrando e enviando dados.");
+        
+        this.desconectar();
     }
 }
