@@ -11,10 +11,10 @@ public class Comunicador implements Runnable{
     private final Socket socket;
     private final ObjectOutputStream output;
     private final ObjectInputStream input;
-    private final Servidor_Redes servidor;
+    private final Servidor servidor;
     HashMap<Integer, Candidato> listaCandidatos_urnas;
 
-    public Comunicador(Socket socket, Servidor_Redes servidor) throws IOException{
+    public Comunicador(Socket socket, Servidor servidor) throws IOException{
         this.socket = socket;
         this.servidor = servidor;
         this.output = new ObjectOutputStream(socket.getOutputStream());
@@ -30,15 +30,20 @@ public class Comunicador implements Runnable{
             Integer codOp = (Integer) input.readObject();
             if(codOp == 999){
                 num_urna = servidor.novaUrna();
-                System.out.println("Urna nº " + num_urna + " conectou.");
+                System.out.println("\n**********************\n"+
+                        "Urna nº " + num_urna + " se conectou."+
+                        "\n**********************\n");
                 output.writeObject(Integer.valueOf(num_urna));
                 output.writeObject(listaCandidatos_urnas);
             }else if(codOp == 888){
                 num_urna = (Integer) input.readObject();
-                System.out.println("Urna nº " + num_urna + " enviou seus dados");
+                System.out.println("\n****************************\n"+
+                        "Urna nº " + num_urna + " enviou seus dados.");
+                        System.out.printf( "%.2f", (servidor.urnaFechada()*100.0)/(servidor.getNum_urna()) );  
+                        System.out.println("% das urnas fechadas."+ 
+                                "\n*****************************\n");
                 servidor.candidatos.apuracao((HashMap<Integer, Candidato>)input.readObject(), 
                         (Integer) input.readObject(), (Integer) input.readObject());
-                System.out.println("Dados computados.");
             }else{
                 System.out.println("codOp inválido.");
             }

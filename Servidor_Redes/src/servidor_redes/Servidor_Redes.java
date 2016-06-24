@@ -8,24 +8,19 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Servidor_Redes{
-    int num_urna;
-    Candidatos candidatos;
-    Placar placar;
-    
-    public Servidor_Redes(){
-        this.num_urna = 0;
-    }
-    
-    public synchronized int novaUrna(){
-        num_urna++;
-        return num_urna;
-    }
+
    
-    public static void main(String[] args) throws IOException{
-        Servidor_Redes servidor = new Servidor_Redes();
+    @SuppressWarnings("empty-statement")
+    public static void main(String[] args) throws IOException, InterruptedException{
+        Servidor servidor = new Servidor();
         
         BufferedReader entrada = new BufferedReader(new InputStreamReader((System.in)));
         
+        System.out.println("-----------------------------------------------------\n"+
+                "\t*** SISTEMA DE VOTAÇÃO ELETÔNICA ***\n"+
+                "-----------------------------------------------------\n");
+        
+        System.out.println("Seja Bem-Vindo!!\nPara iniciar...");
         System.out.print("Digite o número de candidatos: ");
         int num_candidatos = Integer.parseInt(entrada.readLine());
         servidor.candidatos = new Candidatos(num_candidatos);
@@ -35,7 +30,7 @@ public class Servidor_Redes{
         String partido;
         
         for(int i=0; i<num_candidatos; i++){
-            System.out.println("\n\nCandidato " + (i+1) + ":");
+            System.out.println("\n** Candidato " + (i+1) + ":\n");
             System.out.print("Código de votação: ");
             codigo_votacao = Integer.parseInt(entrada.readLine());
             System.out.print("Nome do candidato: ");
@@ -45,6 +40,8 @@ public class Servidor_Redes{
             Candidato novoCandidato = new Candidato(codigo_votacao, nome_candidato, partido);
             
             if(servidor.candidatos.addCandidato(novoCandidato) == false){
+                System.out.println("\nERRO: O código de votação já foi usado por outro candidato.\n"+
+                        "Use um novo código para o candidato " + (i+1) + "\n");
                 i--;
             }
         }
@@ -55,20 +52,21 @@ public class Servidor_Redes{
         Thread placar_t = new Thread(servidor.placar);
         placar_t.start();
         
-        //Servidor aguardando conecções na porta 1500
-        ServerSocket server = new ServerSocket(40105, 100);
+        System.out.println("\nPARABÉNS: Os candidatos já foram cadastrados. As urnas já podem iniciar a votação.\n");
+        System.out.println("O resultado parcial será mostrado em intervalos de 10 segundos.\n");
+        System.out.println("Digite 'q' seguido de ENTER a qualquer momento para encerrar a votação.\n");
         
-        //Loop para conectar aos clientes
-        while (true) {
-            System.out.println("Aguardando conexões...");
-            Socket socket = server.accept();
-            System.out.println("Conectado!");
-
-            Comunicador urna = new Comunicador(socket, servidor);
-           
-            Thread t = new Thread(urna);
-            t.start();
-        }
+        Thread servidor_t = new Thread(servidor);
+        servidor_t.start();
+        
+        while(entrada.read() != 'q');  
+        
+        Thread.sleep(5000);
+        servidor.terminar();
+        placar_t.interrupt();
+        
+        servidor.placar.placarFinal();
+       
     }
     
 }

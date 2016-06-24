@@ -75,5 +75,50 @@ public class Candidatos{
         this.nulos += nulos;
         this.total_votos += (brancos+nulos);
     }
+    
+    @Override
+    public synchronized String toString(){
+        String texto = "";
+        
+        for(Integer codCandidato  : listaCandidatos.keySet()){
+                Candidato candidato = listaCandidatos.get(codCandidato);
+                texto = texto.concat(candidato.toString());
+        }
+        texto = texto.concat("\nNúmero de votos brancos: " + brancos );
+        texto = texto.concat("\nNúmero de votos nulos: " + nulos);
+        texto = texto.concat("\n\n** Número total de votos: " + total_votos + "\n");
+        return  texto;
+    }
+
+    public String toString2(){
+        String texto = "";
+        float porcento;
+        
+        for(Integer codCandidato  : listaCandidatos.keySet()){
+                Candidato candidato = listaCandidatos.get(codCandidato);
+                texto = texto.concat(candidato.toString());
+                porcento = (candidato.getNum_votos() * 100.0f/total_votos);
+                texto = texto.concat("Porcentagem dos votos: " + String.format("%.2f", porcento) + "% ");
+                texto = texto.concat(porcGraf(porcento));  
+        }
+        texto = texto.concat("\n\nNúmero de votos brancos: " + brancos + "\n");
+        porcento = (brancos * 100.0f/total_votos);
+        texto = texto.concat("Porcentagem dos votos: " + String.format("%.2f", porcento) + "% ");
+        texto = texto.concat(porcGraf(porcento));  
+        texto = texto.concat("\n\nNúmero de votos nulos: " + nulos + "\n");
+        porcento = (nulos * 100.0f/total_votos);
+        texto = texto.concat("Porcentagem dos votos: " + String.format("%.2f", porcento) + "% ");
+        texto = texto.concat(porcGraf(porcento));  
+        texto = texto.concat("\n\n** Número total de votos: " + total_votos + "\n");
+        return  texto;
+    }
+    
+    private String porcGraf(float porcento){
+        String texto = "";
+        for(int i = 0; i<(int)porcento; i++){
+            texto = texto.concat("|");
+        }
+        return texto;
+    }
       
 }

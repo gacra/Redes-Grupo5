@@ -14,8 +14,18 @@ public class Placar implements Runnable{
         this.candidatos = candidatos;
         this.listaCandidatos = this.candidatos.getListaCandidatos();
     }
-
     
+    public void placarFinal(){
+        DateFormat formato = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+        Date data = new Date();
+        String dataFormat = formato.format(data);
+        
+        System.out.println("\n------------------------\n"+
+                "*** RESULTADO FINAL ***\n" +
+                "------------------------\n");
+        System.out.println("Votação encerrada às " + dataFormat + ".");
+        System.out.println(candidatos.toString2());
+    }
     
     @Override
     public void run(){
@@ -25,18 +35,15 @@ public class Placar implements Runnable{
         while(true){   
             try{
                 Thread.sleep(10000);
-            }catch(InterruptedException ex){}
+            }catch(InterruptedException ex){
+                return;
+            }
             Date data = new Date();
             String dataFormat = formato.format(data);
-            System.out.println("\n\nAtualização às " + dataFormat + ":");
-            for(Integer codCandidato  : listaCandidatos.keySet()){
-                Candidato candidato = listaCandidatos.get(codCandidato);
-                System.out.print(candidato.toString());
-            }
-            System.out.println("\nNúmero de votos brancos: " + candidatos.getBrancos());
-            System.out.println("Número de votos nulos: " + candidatos.getNulos());
-            System.out.println("Número total de votos: " + candidatos.getTotal_votos());
-            
+            System.out.println("\n------------------------------------\n" + ""
+                    + "Atualização às " + dataFormat + 
+                    "\n------------------------------------");
+            System.out.println(candidatos.toString());
         }
     }
     
