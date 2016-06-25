@@ -3,6 +3,7 @@ package cliente_redes;
 import Comum.Candidato;
 import java.applet.Applet;
 import java.applet.AudioClip;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.text.ParseException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.text.MaskFormatter;
 
 public class IntGrafUrna extends javax.swing.JFrame{
@@ -41,6 +43,10 @@ public class IntGrafUrna extends javax.swing.JFrame{
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("voting.png"));
         this.setIconImage(iconeTitulo);
         this.setTitle("Urna Eletrônica nº " + urna.getNum_urna());
+        try {
+            UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+        } catch (Exception e) {}
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -70,6 +76,15 @@ public class IntGrafUrna extends javax.swing.JFrame{
         confirma.setOpaque(true);
         confirma.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         confirma.setText("Confirma");
+        confirma.setBorderPainted(false);
+        confirma.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                confirmaMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                confirmaMouseExited(evt);
+            }
+        });
         confirma.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 confirmaActionPerformed(evt);
@@ -91,7 +106,16 @@ public class IntGrafUrna extends javax.swing.JFrame{
         nulo.setFont(new java.awt.Font("Arial", 1, 20)); // NOI18N
         nulo.setOpaque(true);
         nulo.setText("Nulo");
+        nulo.setBorderPainted(false);
         nulo.setPreferredSize(new java.awt.Dimension(119, 33));
+        nulo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                nuloMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                nuloMouseExited(evt);
+            }
+        });
         nulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 nuloActionPerformed(evt);
@@ -102,6 +126,15 @@ public class IntGrafUrna extends javax.swing.JFrame{
         enviar.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         enviar.setOpaque(true);
         enviar.setText("Enviar");
+        enviar.setBorderPainted(false);
+        enviar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                enviarMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                enviarMouseExited(evt);
+            }
+        });
         enviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 enviarActionPerformed(evt);
@@ -377,6 +410,30 @@ public class IntGrafUrna extends javax.swing.JFrame{
     private void campoCodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoCodMouseClicked
         this.campoCod.setCaretPosition(0);
     }//GEN-LAST:event_campoCodMouseClicked
+
+    private void nuloMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nuloMouseEntered
+        this.nulo.setBackground(new Color(236, 141, 0));
+    }//GEN-LAST:event_nuloMouseEntered
+
+    private void confirmaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmaMouseEntered
+        this.confirma.setBackground(new Color(0, 235, 0));
+    }//GEN-LAST:event_confirmaMouseEntered
+
+    private void confirmaMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmaMouseExited
+        this.confirma.setBackground(new Color(51, 255, 51));
+    }//GEN-LAST:event_confirmaMouseExited
+
+    private void nuloMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nuloMouseExited
+        this.nulo.setBackground(new Color(255, 153, 0));
+    }//GEN-LAST:event_nuloMouseExited
+
+    private void enviarMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseEntered
+        this.enviar.setBackground(new Color(113, 113, 255));
+    }//GEN-LAST:event_enviarMouseEntered
+
+    private void enviarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enviarMouseExited
+        this.enviar.setBackground(new Color(153, 153, 255));
+    }//GEN-LAST:event_enviarMouseExited
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton branco;
