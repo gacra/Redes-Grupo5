@@ -7,14 +7,16 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class Comunicador{
+public class Comunicador implements Runnable{
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
     Urna urna;
+    IntGrafConect igConect;
 
-    public Comunicador(Urna urna){
+    public Comunicador(Urna urna, IntGrafConect igConect){
         this.urna = urna;
+        this.igConect = igConect;
     }
     
     /**
@@ -69,4 +71,22 @@ public class Comunicador{
         
         this.desconectar();
     }
+
+    @Override
+    public void run(){
+        int naoConect = 0;
+        
+        try{
+            igConect.texto(1);
+            while(!conectar()){
+                naoConect++;
+                if(naoConect == 10){
+                    igConect.texto(3);
+                }
+            };
+            igConect.texto(2);
+            pConexao();
+            igConect.texto(4);
+        }catch(InterruptedException | IOException | ClassNotFoundException ex){}
+        }
 }

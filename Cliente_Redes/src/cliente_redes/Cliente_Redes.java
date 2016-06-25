@@ -8,14 +8,13 @@ import java.io.InputStreamReader;
 
 public class Cliente_Redes{
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException{
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
         Urna urna = new Urna();
         
-        System.out.println("Conectando.");
-        Comunicador comunicador = new Comunicador(urna); 
-        comunicador.conectar();
-        comunicador.pConexao();
+        IntGrafUrna igUrna = new IntGrafUrna(urna);
+        igUrna.setVisible(true);
         
+        /*
         BufferedReader entrada = new BufferedReader(new InputStreamReader((System.in)));
         
         do{            
@@ -44,7 +43,7 @@ public class Cliente_Redes{
             comunicador.sConexao();
         }else{
             System.out.println("Não houve nenhum voto");
-        }
+        }*/
         
     }
     

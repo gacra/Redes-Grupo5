@@ -16,9 +16,9 @@ public class Servidor_Redes{
         
         BufferedReader entrada = new BufferedReader(new InputStreamReader((System.in)));
         
-        System.out.println("-----------------------------------------------------\n"+
-                "\t*** SISTEMA DE VOTAÇÃO ELETÔNICA ***\n"+
-                "-----------------------------------------------------\n");
+        System.out.println("------------------------------------------------------\n"+
+                "\t*** SISTEMA DE VOTAÇÃO ELETRÔNICA ***\n"+
+                "------------------------------------------------------\n");
         
         System.out.println("Seja Bem-Vindo!!\nPara iniciar...");
         System.out.print("Digite o número de candidatos: ");

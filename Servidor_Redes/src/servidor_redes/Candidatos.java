@@ -76,8 +76,7 @@ public class Candidatos{
         this.total_votos += (brancos+nulos);
     }
     
-    @Override
-    public synchronized String toString(){
+    public synchronized String toString2(){
         String texto = "";
         
         for(Integer codCandidato  : listaCandidatos.keySet()){
@@ -90,7 +89,8 @@ public class Candidatos{
         return  texto;
     }
 
-    public String toString2(){
+    @Override
+    public String toString(){
         String texto = "";
         float porcento;
         

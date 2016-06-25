@@ -24,7 +24,7 @@ public class Placar implements Runnable{
                 "*** RESULTADO FINAL ***\n" +
                 "------------------------\n");
         System.out.println("Votação encerrada às " + dataFormat + ".");
-        System.out.println(candidatos.toString2());
+        System.out.println(candidatos.toString());
     }
     
     @Override
