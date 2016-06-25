@@ -1,13 +1,26 @@
 package Comum;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
+    /**
+     *Classe que representa cada candidato da votação.
+     *Presente no projeto cliente e no servidor, pois os objetos dessa classe
+     * são trocados entre os dois por meio da rede.
+     */
 public class Candidato implements Serializable, Cloneable{
     private final int codigo_votacao;
     private final String nome_candidato;
     private final String partido;
-    private int num_votos;
+    private int num_votos;  //Número de votos do candidato.
 
+    /**
+     *Construtor da Classe Candidato. 
+     * @param codigo_votacao Código de votação do candidato.
+     * @param nome_candidato Nome do candidato.
+     * @param partido Partido da candidato.
+     */
     public Candidato(int codigo_votacao, String nome_candidato, String partido){
         this.codigo_votacao = codigo_votacao;
         this.nome_candidato = nome_candidato;
@@ -32,7 +45,7 @@ public class Candidato implements Serializable, Cloneable{
     }
     
     /**
-     *
+     * Acrescenta votos ao candidato.
      * @param num Número de votos a serem acrescentados no total do candidato.
      */
     public synchronized void acresVotos(int num){
@@ -41,7 +54,9 @@ public class Candidato implements Serializable, Cloneable{
     
     @Override
     public String toString(){
-        return  "\n\nCódigo de votação: " + codigo_votacao + "\nNome do candidato: " + nome_candidato
+        NumberFormat formatter = new DecimalFormat("00");
+        String sCod = formatter.format(codigo_votacao);
+        return  "\n\nCódigo de votação: " + sCod  + "\nNome do candidato: " + nome_candidato
                 + "\nPartido: " + partido + "\nNúmero de votos: " + num_votos + "\n";
     }
     
@@ -50,6 +65,9 @@ public class Candidato implements Serializable, Cloneable{
         return (Candidato) super.clone();
     }
     
+    /**
+     *Acrescenta um único voto ao candidato
+     */
     public void votado(){
         num_votos++;
     }

@@ -8,19 +8,16 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.text.MaskFormatter;
 
 public class IntGrafUrna extends javax.swing.JFrame{
-    public Urna urna;
-    private IntGrafConect igConect;
-    private Comunicador comunicador;
-    private AudioClip audio;
-    private ImageIcon icone;
+    public Urna urna;                   //Urna
+    private IntGrafConect igConect;     //Tela inicial de conexão
+    private Comunicador comunicador;    //Comunicador
+    private AudioClip audio;            //Som da urna
+    private ImageIcon icone;            //Ícone da urna
     
     /**
      * Creates new form IntGrafUrna
@@ -249,13 +246,18 @@ public class IntGrafUrna extends javax.swing.JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void campoCodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoCodActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_campoCodActionPerformed
 
     private void campoCodKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoCodKeyTyped
         
     }//GEN-LAST:event_campoCodKeyTyped
 
+    /**
+     * Trata o texto obtido pelo campo formatado campoCod.
+     * @param texto Texto não tratado.
+     * @return Texto tratado.
+     */
     private String trataTexto(String texto){
         String texto2 = "";
         for(int i=0; i<texto.length(); i++){
@@ -265,6 +267,11 @@ public class IntGrafUrna extends javax.swing.JFrame{
         return texto2;
     }
     
+    /**
+     * Quando o cursor se move no campo do código de votação, os campos de nome
+     * e partido do canditado são atualizados.
+     * @param evt 
+     */
     private void campoCodCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_campoCodCaretUpdate
         String texto = campoCod.getText();
         texto = trataTexto(texto);
@@ -288,6 +295,11 @@ public class IntGrafUrna extends javax.swing.JFrame{
 
     }//GEN-LAST:event_campoCodCaretPositionChanged
 
+    /**
+     * Quando o botão de enviar é clicado. Responsável por enviar os dados, se
+     * possível, para o servidor.
+     * @param evt 
+     */
     private void enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarActionPerformed
         if(urna.getTotal_votos()>0){
             if(comunicador.conectar()){
@@ -308,6 +320,10 @@ public class IntGrafUrna extends javax.swing.JFrame{
         }
     }//GEN-LAST:event_enviarActionPerformed
 
+    /**
+     * Fim de uma votação. Limpa os campos, reproduz o som da urna e gera 
+     * janela de confirmação.
+     */
     private void fim(){
         campoCod.setText("");
         campoNome.setText("");
@@ -317,20 +333,28 @@ public class IntGrafUrna extends javax.swing.JFrame{
         this.campoCod.requestFocus();
     }
     
+    /**
+     * Botão voto em branco clicado.
+     * @param evt 
+     */
     private void brancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brancoActionPerformed
         urna.votar_branco();
         fim();
-        //Remover
-        urna.imprime();
     }//GEN-LAST:event_brancoActionPerformed
 
+    /**
+     * Botão voto nulo clicado.
+     * @param evt 
+     */
     private void nuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuloActionPerformed
         urna.votar_nulo();
         fim();
-        //Remover
-        urna.imprime();
     }//GEN-LAST:event_nuloActionPerformed
 
+    /**
+     * Botão confirma clicado. Se houver um candidato válido nos campos, vota nele.
+     * @param evt 
+     */
     private void confirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaActionPerformed
         String texto = campoCod.getText();
         texto = trataTexto(texto);
@@ -344,10 +368,12 @@ public class IntGrafUrna extends javax.swing.JFrame{
             }
         }
         this.campoCod.requestFocus();
-        //Remover
-        urna.imprime();
     }//GEN-LAST:event_confirmaActionPerformed
 
+    /**
+     * Faz com que o cursor do campo de código esteja sempre na posição 0.
+     * @param evt 
+     */
     private void campoCodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoCodMouseClicked
         this.campoCod.setCaretPosition(0);
     }//GEN-LAST:event_campoCodMouseClicked

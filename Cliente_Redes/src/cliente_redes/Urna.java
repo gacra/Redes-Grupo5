@@ -3,12 +3,15 @@ package cliente_redes;
 import Comum.Candidato;
 import java.util.HashMap;
 
+/**
+ * Classe que representa a urna.
+ */
 public class Urna{
-    private int num_urna;
-    private int brancos;
-    private int nulos;
-    private int total_votos;
-    private HashMap<Integer, Candidato> listaCandidatos;
+    private int num_urna;       //Número da urna
+    private int brancos;        //Número de votos em branco
+    private int nulos;          //Número de votos nulos
+    private int total_votos;    //Número total de votos
+    private HashMap<Integer, Candidato> listaCandidatos;    //Lista de candidatos
 
     public Urna(){
         this.brancos = 0;
@@ -42,35 +45,39 @@ public class Urna{
 
     public void setListaCandidatos(HashMap<Integer, Candidato> listaCandidatos){
         this.listaCandidatos = listaCandidatos;
-        this.imprime();
     }
     
+    /**
+     * Econtra, e retorna, o candidato com determinado Código de Votação.
+     * @param codigo_votacao
+     * @return Candidato.
+     */
     public Candidato encontraCandidato(int codigo_votacao){
         return listaCandidatos.get(codigo_votacao);
     }
     
+    /**
+     * Dá um voto ao canditado.
+     * @param candidato
+     */
     public void votar(Candidato candidato){
         candidato.votado();
         total_votos++;
     }
     
+    /**
+     * Vota em branco.
+     */
     public void votar_branco(){
         brancos++;
         total_votos++;
     }
     
+    /**
+     * Vota nulo.
+     */
     public void votar_nulo(){
         nulos++;
         total_votos++;
-    }
-    
-    //Retirar ao final
-    public void imprime(){
-        for(Integer codCandidato  : listaCandidatos.keySet()){
-                Candidato candidato = listaCandidatos.get(codCandidato);
-                System.out.println(candidato.toString());
-        }
-        System.out.println("Brancos: " + brancos);
-        System.out.println("Nulos " + nulos);
     }
 }

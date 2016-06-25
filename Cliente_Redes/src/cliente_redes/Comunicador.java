@@ -7,13 +7,21 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
 
+/**
+ * Responsável pela comunicação do lado cliente.
+ */
 public class Comunicador implements Runnable{
     Socket socket;
     ObjectOutputStream output;
     ObjectInputStream input;
     Urna urna;
-    IntGrafConect igConect;
+    IntGrafConect igConect; //Janela inicial de conexão
 
+    /**
+     *
+     * @param urna Urna
+     * @param igConect Janela inicial de conexão
+     */
     public Comunicador(Urna urna, IntGrafConect igConect){
         this.urna = urna;
         this.igConect = igConect;
@@ -36,9 +44,7 @@ public class Comunicador implements Runnable{
     } 
     
     /**
-     *Finaliza a conexão com o servidor.
-     * @param 
-     * @return  
+     * Finaliza a conexão com o servidor. 
      */
     private void desconectar() throws IOException{
         input.close();
@@ -47,31 +53,40 @@ public class Comunicador implements Runnable{
     }
     
     /**
-     *Primeira conexão com o servidor (codOp = 999). 
+     * Primeira conexão com o servidor (codOp = 999). 
      * Recebe o número da urna e a lista de candidatos.
      *
+     * @throws java.io.IOException
+     * @throws java.lang.ClassNotFoundException
      */
     public void pConexao() throws IOException, ClassNotFoundException{
         this.output.writeObject(Integer.valueOf(999));
-        urna.setNum_urna((Integer)this.input.readObject());
-        System.out.println("Conectado. Sou a urna: " + urna.getNum_urna()); 
-        
+        urna.setNum_urna((Integer)this.input.readObject());        
         urna.setListaCandidatos((HashMap<Integer, Candidato>) this.input.readObject());
         
         this.desconectar();
     }
     
+    /**
+     * Segunda conexão com o servidor.
+     * Envia o próprio número, a lista de candidatos (coms seus respectivos votos),
+     * e o número de votos brancos e nulos.
+     * @throws IOException
+     */
     public void sConexao() throws IOException{
         this.output.writeObject(Integer.valueOf(888));
         this.output.writeObject(urna.getNum_urna());
         this.output.writeObject(urna.getListaCandidatos());
         this.output.writeObject(urna.getBrancos());
         this.output.writeObject(urna.getNulos());
-        System.out.println("Urna " + urna.getNum_urna() + " encerrando e enviando dados.");
         
         this.desconectar();
     }
 
+     /**
+     * Thread responsável pela conexão inicial. Atualiza o progresso na janela
+     * inicial.
+     */
     @Override
     public void run(){
         int naoConect = 0;

@@ -3,6 +3,9 @@ package cliente_redes;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+/**
+ * Janela inicial que mostra o progresso na primeira coneção com o servidor.
+ */
 public class IntGrafConect extends javax.swing.JDialog{
 
     /**
@@ -31,7 +34,7 @@ public class IntGrafConect extends javax.swing.JDialog{
         barraProgresso = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         msg = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        sair = new javax.swing.JButton();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -65,11 +68,11 @@ public class IntGrafConect extends javax.swing.JDialog{
         msg.setRows(5);
         jScrollPane1.setViewportView(msg);
 
-        jButton1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jButton1.setText("Sair");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        sair.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        sair.setText("Sair");
+        sair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                sairActionPerformed(evt);
             }
         });
 
@@ -86,34 +89,35 @@ public class IntGrafConect extends javax.swing.JDialog{
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 573, Short.MAX_VALUE))
                 .addGap(50, 50, 50))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(132, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(118, 118, 118))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(309, 309, 309))))
+                        .addComponent(sair)
+                        .addGap(309, 309, 309))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(31, 31, 31))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(170, 170, 170)
-                        .addComponent(jLabel4))
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(jLabel2)
-                        .addGap(34, 34, 34)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)))
                 .addComponent(barraProgresso, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(sair)
                 .addGap(12, 12, 12)
                 .addComponent(jLabel3)
                 .addContainerGap())
@@ -123,7 +127,7 @@ public class IntGrafConect extends javax.swing.JDialog{
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 623, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,10 +137,19 @@ public class IntGrafConect extends javax.swing.JDialog{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    /**
+     * Ao apertar o botão de sair, sai do programa.
+     * @param evt 
+     */
+    private void sairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sairActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_sairActionPerformed
 
+    /**
+     * Atualiza a barra de progresso.
+     * @param porcento Porcentagem de progresso que a barra deve mostrar.
+     * @throws InterruptedException 
+     */
     private void progresso(int porcento) throws InterruptedException{
         int atual = barraProgresso.getValue();
         
@@ -146,6 +159,15 @@ public class IntGrafConect extends javax.swing.JDialog{
         }
     }
     
+    /**
+     * Atualiza a tela com a mensagem e o progresso correto para cada caso.
+     * @param cod Código do caso.
+     * Se 1: Início.
+     * Se 2: Conectado ao servidor.
+     * Se 3: Coneção com o servidor não possível.
+     * Se 4: O número da urna e a lista de candidatos foram obtidos.
+     * @throws InterruptedException 
+     */
     public void texto(int cod) throws InterruptedException{
         switch(cod){
             case 1:
@@ -171,7 +193,6 @@ public class IntGrafConect extends javax.swing.JDialog{
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar barraProgresso;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -179,5 +200,6 @@ public class IntGrafConect extends javax.swing.JDialog{
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea msg;
+    private javax.swing.JButton sair;
     // End of variables declaration//GEN-END:variables
 }
