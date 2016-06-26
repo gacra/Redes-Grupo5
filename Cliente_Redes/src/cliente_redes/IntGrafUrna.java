@@ -6,6 +6,8 @@ import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
@@ -14,26 +16,28 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.text.MaskFormatter;
 
-public class IntGrafUrna extends javax.swing.JFrame{
+public class IntGrafUrna extends javax.swing.JFrame {
+
     public Urna urna;                   //Urna
     private IntGrafConect igConect;     //Tela inicial de conexão
     private Comunicador comunicador;    //Comunicador
     private AudioClip audio;            //Som da urna
     private ImageIcon icone;            //Ícone da urna
-    
+
     /**
      * Creates new form IntGrafUrna
+     *
      * @param urna
      */
-    public IntGrafUrna(Urna urna) throws IOException, ClassNotFoundException, InterruptedException{
+    public IntGrafUrna(Urna urna) throws IOException, ClassNotFoundException, InterruptedException {
         this.urna = urna;
-        
+
         igConect = new IntGrafConect(this, true);
         comunicador = new Comunicador(urna, igConect);
         Thread comunicador_t = new Thread(comunicador);
         comunicador_t.start();
         igConect.setVisible(true);
-      
+
         initComponents();
         URL url = getClass().getResource("somUrna.wav");
         this.audio = Applet.newAudioClip(url);
@@ -43,10 +47,18 @@ public class IntGrafUrna extends javax.swing.JFrame{
         Image iconeTitulo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("voting.png"));
         this.setIconImage(iconeTitulo);
         this.setTitle("Urna Eletrônica nº " + urna.getNum_urna());
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                enviar.doClick();
+                System.exit(0);
+            }
+        });
         try {
-            UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
-        } catch (Exception e) {}
-        
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch(Exception e) {
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -283,42 +295,45 @@ public class IntGrafUrna extends javax.swing.JFrame{
     }//GEN-LAST:event_campoCodActionPerformed
 
     private void campoCodKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_campoCodKeyTyped
-        
+
     }//GEN-LAST:event_campoCodKeyTyped
 
     /**
      * Trata o texto obtido pelo campo formatado campoCod.
+     *
      * @param texto Texto não tratado.
      * @return Texto tratado.
      */
-    private String trataTexto(String texto){
+    private String trataTexto(String texto) {
         String texto2 = "";
-        for(int i=0; i<texto.length(); i++){
-            if(Character.isDigit(texto.charAt(i)))
+        for(int i = 0; i < texto.length(); i++) {
+            if(Character.isDigit(texto.charAt(i))) {
                 texto2 = texto2.concat(String.valueOf(texto.charAt(i)));
+            }
         }
         return texto2;
     }
-    
+
     /**
      * Quando o cursor se move no campo do código de votação, os campos de nome
      * e partido do canditado são atualizados.
-     * @param evt 
+     *
+     * @param evt
      */
     private void campoCodCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_campoCodCaretUpdate
         String texto = campoCod.getText();
         texto = trataTexto(texto);
-        
-        if(texto.length() > 1){
+
+        if(texto.length() > 1) {
             Candidato candidato = urna.encontraCandidato(Integer.parseInt(texto));
-            if(candidato == null){
+            if(candidato == null) {
                 campoNome.setText("Desculpe. Não há candidato com esse código.");
                 campoPartido.setText("");
-            }else{
+            } else {
                 campoNome.setText(candidato.getNome_candidato());
                 campoPartido.setText(candidato.getPartido());
             }
-        }else{
+        } else {
             campoNome.setText("");
             campoPartido.setText("");
         }
@@ -331,33 +346,32 @@ public class IntGrafUrna extends javax.swing.JFrame{
     /**
      * Quando o botão de enviar é clicado. Responsável por enviar os dados, se
      * possível, para o servidor.
-     * @param evt 
+     *
+     * @param evt
      */
     private void enviarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enviarActionPerformed
-        if(urna.getTotal_votos()>0){
-            if(comunicador.conectar()){
-                try{
+        if(urna.getTotal_votos() > 0) {
+            if(comunicador.conectar()) {
+                try {
                     comunicador.sConexao();
                     JOptionPane.showMessageDialog(igConect, "Os votos foram enviados.", "Obrigado", WIDTH);
-                }catch(IOException ex){
+                } catch(IOException ex) {
                     System.out.println("Erro na segunda conexão.");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(igConect, "Os votos não puderam ser enviados. Provavelmente a votação já se encerrou.", "Desculpe.", NORMAL);
             }
-       
-            System.exit(0);
-        }else{
+        } else {
             JOptionPane.showMessageDialog(igConect, "Não é possível enviar os dados sem que haja ao menos um voto.", "Vote!!!", NORMAL);
             this.campoCod.requestFocus();
         }
     }//GEN-LAST:event_enviarActionPerformed
 
     /**
-     * Fim de uma votação. Limpa os campos, reproduz o som da urna e gera 
-     * janela de confirmação.
+     * Fim de uma votação. Limpa os campos, reproduz o som da urna e gera janela
+     * de confirmação.
      */
-    private void fim(){
+    private void fim() {
         campoCod.setText("");
         campoNome.setText("");
         campoPartido.setText("");
@@ -365,10 +379,11 @@ public class IntGrafUrna extends javax.swing.JFrame{
         JOptionPane.showMessageDialog(igConect, null, "Seu voto foi computado.", WIDTH, icone);
         this.campoCod.requestFocus();
     }
-    
+
     /**
      * Botão voto em branco clicado.
-     * @param evt 
+     *
+     * @param evt
      */
     private void brancoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_brancoActionPerformed
         urna.votar_branco();
@@ -377,7 +392,8 @@ public class IntGrafUrna extends javax.swing.JFrame{
 
     /**
      * Botão voto nulo clicado.
-     * @param evt 
+     *
+     * @param evt
      */
     private void nuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nuloActionPerformed
         urna.votar_nulo();
@@ -385,18 +401,20 @@ public class IntGrafUrna extends javax.swing.JFrame{
     }//GEN-LAST:event_nuloActionPerformed
 
     /**
-     * Botão confirma clicado. Se houver um candidato válido nos campos, vota nele.
-     * @param evt 
+     * Botão confirma clicado. Se houver um candidato válido nos campos, vota
+     * nele.
+     *
+     * @param evt
      */
     private void confirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaActionPerformed
         String texto = campoCod.getText();
         texto = trataTexto(texto);
-        
-        if(texto.length() > 1){
+
+        if(texto.length() > 1) {
             Candidato candidato = urna.encontraCandidato(Integer.parseInt(texto));
-            if(candidato != null){
+            if(candidato != null) {
                 urna.votar(candidato);
-                
+
                 fim();
             }
         }
@@ -405,7 +423,8 @@ public class IntGrafUrna extends javax.swing.JFrame{
 
     /**
      * Faz com que o cursor do campo de código esteja sempre na posição 0.
-     * @param evt 
+     *
+     * @param evt
      */
     private void campoCodMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_campoCodMouseClicked
         this.campoCod.setCaretPosition(0);
