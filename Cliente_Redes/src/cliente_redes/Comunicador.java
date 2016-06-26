@@ -95,7 +95,7 @@ public class Comunicador implements Runnable{
             igConect.texto(1);
             while(!conectar()){
                 naoConect++;
-                if(naoConect == 10){
+                if(naoConect == 5){
                     igConect.texto(3);
                 }
             };

@@ -51,7 +51,6 @@ public class IntGrafUrna extends javax.swing.JFrame {
             @Override
             public void windowClosing(WindowEvent e) {
                 enviar.doClick();
-                System.exit(0);
             }
         });
         try {
@@ -361,6 +360,7 @@ public class IntGrafUrna extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(igConect, "Os votos não puderam ser enviados. Provavelmente a votação já se encerrou.", "Desculpe.", NORMAL);
             }
+            System.exit(0);
         } else {
             JOptionPane.showMessageDialog(igConect, "Não é possível enviar os dados sem que haja ao menos um voto.", "Vote!!!", NORMAL);
             this.campoCod.requestFocus();
